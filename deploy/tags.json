@@ -1,0 +1,10 @@
+{
+  "Application": "mlops-nlp-topic-builder",
+  "ProductTeam": "MLOps",
+  "TechnicalContact": "shuo.chen@wgu.edu",
+  "BusinessUnit": "EdTech",
+  "ProductOwner": "Shuo Chen",
+  "RTO": "ND",
+  "RPO": "ND",
+  "DataClassification": "External"
+}

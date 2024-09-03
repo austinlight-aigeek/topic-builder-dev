@@ -1,0 +1,60 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "nlp-topic-builder"
+version = "0.0.5"
+readme = "README.md"
+requires-python = ">= 3.11"
+# Dev dependencies. For projects distributed as Python packages we want to use [project.optional-dependencies] for these.
+dependencies = [
+    "argon2-cffi==23.1.0",
+    "boto3==1.34.103",
+    "passlib==1.7.4",
+    "pre-commit==3.7.1",
+    "psycopg[binary]==3.1.18",
+    "sqlalchemy[asyncio]==2.0.28",
+    "databricks-connect==14.3.2",
+    "setuptools==73.0.1"
+]
+
+[project.scripts]
+rdsconnect = "scripts.rdsconnect:main"
+create_user = "scripts.create_user:main"
+load_sentence_sample = "scripts.load_sentence_sample:main"
+
+[project.urls]
+Documentation = "https://github.com/WGU-edu/nlp-topic-builder#readme"
+Issues = "https://github.com/WGU-edu/nlp-topic-builder/issues"
+Source = "https://github.com/WGU-edu/nlp-topic-builder"
+
+# We need both app and script folders for dev environment
+[tool.hatch.build.targets.wheel]
+packages = ["src/app", "src/scripts"]
+
+[tool.ruff.lint.extend-per-file-ignores]
+"notebooks/*" = [
+    "T201",  # `print` found: print makes sense in notebooks as we handle error reporting differently than in applications.
+    "F821",  # Undefined name: The linter does not know about spark, dbutils, etc.
+    "S101",  # Use of `assert` detected: We do not run with optimization requested (-O) in notebooks.
+    "F704",  # Await is appropriate because Databricks already runs within an async context.
+    "PLE1142",  # Await is appropriate because Databricks already runs within an async context.
+]
+
+# How RDS Connect feeds connection parameters to subcommands
+# For each environment variable, we specify which Python variable in rds_connect.py we should use to populate the environment variable
+[tool.rdsconnect.interface.create_user]
+POSTGRES_USER = "username"
+POSTGRES_PASSWORD = "password"
+POSTGRES_HOST = "hostname"
+POSTGRES_PORT = "port"
+
+[tool.rdsconnect.interface.liquibase]
+LIQUIBASE_COMMAND_USERNAME = "username"
+LIQUIBASE_COMMAND_PASSWORD = "password"
+LIQUIBASE_COMMAND_URL = "jdbc_url"
+
+[tool.rdsconnect.profile.sbx]
+aws_profile = "sbx"
+rds_id = "topicbuilder"

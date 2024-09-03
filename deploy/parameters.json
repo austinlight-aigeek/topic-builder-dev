@@ -1,0 +1,34 @@
+{
+  "Common": {
+    "ALBHealthcheckEndpoint": "/",
+    "ALBGreenListenerRulePriority": "344",
+    "ALBBlueListenerRulePriority": "345",
+    "ApplicationHostname": "topic-builder",
+    "ApplicationName": "mlops-nlp-topic-builder",
+    "ApplicationPort": "80",
+    "AutoscalingMetricTargetCPU": "90",
+    "AutoscalingMetricTargetRAM": "90",
+    "AutoscalingMetricTargetRequests": "500",
+    "AutoscalingScaleInCooldown": "120",
+    "AutoscalingScaleOutCooldown": "600",
+    "FargateBaseNumTasks": "1",
+    "FargateMaxNumTasks": "1",
+    "FargateCPU": "1024",
+    "FargateRAM": "4096",
+    "FargateCluster": "MLOpsTopicBuilder",
+    "FargateHealthcheckGracePeriod": "300",
+    "ProductTeam": "MLOps"
+  },
+  "Sandbox": {
+    "FargateBaseNumTasks": "1"
+  },
+  "Development": {
+    "EgressCidrIp1": "172.26.0.0/16",
+    "EgressPort1": "5432",
+    "ALBSecurityGroup": "sg-079a4d5e94cfc23e2",
+    "ALBHostname": "internal-MLOpsLoadBalancer-1888916857.us-west-2.elb.amazonaws.com",
+    "ALBListenerArn": "arn:aws:elasticloadbalancing:us-west-2:511454808818:listener/app/MLOpsLoadBalancer/4fe6d28674f625d4/4639f66eda09890b",
+    "ALBTestListenerArn": "arn:aws:elasticloadbalancing:us-west-2:511454808818:listener/app/MLOpsLoadBalancer/4fe6d28674f625d4/b01d5f598d24c9d7",
+    "FargateBaseNumTasks": "1"
+  }
+}

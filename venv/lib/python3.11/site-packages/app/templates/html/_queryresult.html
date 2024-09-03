@@ -1,0 +1,51 @@
+<div id="results" class="row w-100" style="margin: 0; margin-top: 4rem">
+  <ul class="nav nav-tabs" id="resultTabs" role="tablist" style="border-bottom-width: 0px;">
+    <li class="nav-item" role="presentation">
+      <button class=" nav-link active" id="record-tab" data-bs-toggle="tab" data-bs-target="#results-pane" type="button">Results</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="sql-tab" data-bs-toggle="tab" data-bs-target="#sql-pane" type="button">SQL</button>
+    </li>
+  </ul>
+  <div class="tab-content" id="results-display" style="background-color: var(--qbbg); padding-top: 1rem; min-height: 10rem;">
+    <div class="tab-pane show active" id="results-pane">
+      <table class=" table">
+        <thead>
+          <tr>
+            <th style="width: 4rem;">Source</th>
+            <th style="width: 6rem;">Source ID</th>
+            <th>Result Text</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for record in records %}
+            <tr>
+              <td>{{ record.source }}</td>
+              <td>{{ record.source_id }}</td>
+              <td>
+                {% for sentence in record.full_text %}
+                  {% if loop.index0 == record.sentence_pos %}
+                    <span style="color: blue;">{{ sentence }}</span>
+                  {% else %}
+                    {{ sentence }}
+                  {% endif %}.
+                {% endfor %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class=" tab-pane" id="sql-pane">
+      <p
+        id="sqlpreview"
+        class="card-text"
+        style="white-space: pre-wrap; font-family: Menlo, Monaco, Consolas, Ubuntu Mono, Source Code Pro, monospace, Menlo, Monaco, Courier New, monospace;">
+        {{- sql }}
+        {% if params %}
+          <br />Parameters: {{ params }}
+        {% endif %}
+      </p>
+    </div>
+  </div>
+</div>

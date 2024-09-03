@@ -1,0 +1,19 @@
+{
+  "id": "6d070a41-f577-4166-87b2-d5fa5570e343",
+  "name": "MLOps Topic Builder",
+  "values": [
+    {
+      "key": "LoadBalancerEndpoint",
+      "value": "",
+      "enabled": true
+    },
+    {
+      "key": "AWSEnvironment",
+      "value": "",
+      "enabled": true
+    }
+  ],
+  "_postman_variable_scope": "environment",
+  "_postman_exported_at": "2020-09-14T20:28:20.372Z",
+  "_postman_exported_using": "Postman/7.30.1"
+}

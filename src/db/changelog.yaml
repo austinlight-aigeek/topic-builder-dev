@@ -1,0 +1,4 @@
+# Liquibase "Changelog" control file. Picks up any SQL migrations under the migrations folder.
+databaseChangeLog:
+  - includeAll:
+      path: migrations/

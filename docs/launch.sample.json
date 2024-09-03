@@ -1,0 +1,29 @@
+{
+  "comment": "Sample debug configurations for VSCode. See https://code.visualstudio.com/docs/editor/debugging",
+  "configurations": [
+    {
+      "name": "Python Debugger: Attach to Docker Compose",
+      "type": "debugpy",
+      "request": "attach",
+      "connect": {
+        "host": "localhost",
+        "port": 5678
+      },
+      "pathMappings": [
+        {
+          "localRoot": "${workspaceFolder}/src/app",
+          "remoteRoot": "."
+        }
+      ],
+      "justMyCode": false
+    },
+    {
+      "name": "Python Debugger: Script",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    }
+  ]
+}

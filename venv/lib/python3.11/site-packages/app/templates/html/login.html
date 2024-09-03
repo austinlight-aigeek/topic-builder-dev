@@ -1,0 +1,31 @@
+<body>
+  {% include "_modalcontainer.html" %}
+  <title>Login</title>
+  <div class="container" style="height: 100%; align-content: center;">
+    <div class="d-flex justify-content-center h-100">
+      <div class="card" style="height: 450px; margin-top: auto; margin-bottom: auto; width: 400px;">
+        <div class="card-header" style="background-color: rgb(64, 123, 163);">
+          <h1 style="text-align: center; font-weight: 200; color: white;">Login</h1>
+        </div>
+        <div class="card-body">
+          {% if error %}
+            <div class="alert alert-danger" role="alert">{{ error }}</div>
+          {% endif %}
+          {% if msg %}
+            <div class="alert alert-success" role="success">{{ msg }}</div>
+          {% endif %}
+
+          <form hx-post="/login" hx-target="body" class="form-outline">
+            <label for="username" class="form-label">Username:</label>
+            <input type="text" class="form-control" id="username" name="username" required style="margin-bottom: 1rem;" />
+            <label for="password" class="form-label">Password:</label>
+            <input type="password" class="form-control" id="password" name="password" required style="margin-bottom: 1rem;" />
+            <div class="text-center">
+              <input type="submit" class="btn btn-lg btn-primary btn-block mb-2" style="font-weight: 200;" value="Login" />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

@@ -1,0 +1,102 @@
+<body>
+  {% include "_modalcontainer.html" %}
+  <div class="row w-100 h-100">
+    {% include "_sidebar.html" %}
+    <div class="container col">
+      <h2 class="display-2" style="text-align: center;">{{ title.split()[0] + ' Topic' }}</h2>
+      <hr />
+      <div class="input-group" style="z-index: 1; display: flex; justify-content: space-between; padding-left: 10px; padding-right: 10px; ">
+        <span style="display: inline-flex; align-items: center;">
+          <label class="input-group-text" for="rulesetName">Name:</label>
+          <input class="form-control" type="text" id="rulesetName" value="{% if ruleset %}{{ ruleset.name }}{% endif %}" />
+        </span>
+        <span style="display: inline-flex; align-items: center;">
+          <label class="input-group-text" for="ownerName">Owner:</label>
+          <input class="form-control" type="text" id="ownerName" value="{{ owner }}" disabled />
+        </span>
+        <span style="display: flex; align-items: center;">
+          <label class="form-check-label" for="runInProductionToggle"> Run in Production </label>&nbsp;
+
+          <input
+            class=" form-check-input mt-0"
+            type="checkbox"
+            id="runInProductionToggle"
+            {%- if ruleset and ruleset.is_active %}checked{% endif %}
+            style="border-color: black; border-radius: 0; width: 16px; height: 16px; margin: 0px;" />&nbsp;
+        </span>
+      </div>
+      <hr />
+      <div id="builder" style="z-index: -5;"></div>
+
+      <span class="btn-group float-end">
+        <button class="btn btn-warning" id="btn-reset">Clear</button>
+        <button class="btn btn-info" id="btn-query" hx-vals="js:{...$('#builder').queryBuilder('getRules')}" hx-post="/query" hx-target="#results">Test</button>
+        {% if title == 'Create Topic' %}
+          <button
+            class="btn btn-primary"
+            hx-vals="js:{expression:$('#builder').queryBuilder('getRules'),name:$('#rulesetName').val(),is_active:$('#runInProductionToggle').is(':checked')}"
+            hx-post="/create"
+            hx-target="body">
+            Create
+          </button>
+        {% elif title.startswith('Edit Topic') %}
+          <button
+            class="btn btn-primary"
+            hx-vals="js:{expression:$('#builder').queryBuilder('getRules'),name:$('#rulesetName').val(),is_active:$('#runInProductionToggle').is(':checked')}"
+            hx-put="/edit/{{ ruleset.id }}"
+            hx-target="body">
+            Save
+          </button>
+        {% else %}
+          <span id="btn-copy-tooltip" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Please change the topic name to create a copy">
+            <button
+              id="btn-copy"
+              class="btn btn-primary"
+              hx-vals="js:{expression:$('#builder').queryBuilder('getRules'),name:$('#rulesetName').val(),is_active:$('#runInProductionToggle').is(':checked')}"
+              hx-post="/create"
+              hx-target="body">
+              Create Copy
+            </button>
+          </span>
+        {% endif %}
+      </span>
+      {% include "_queryresult.html" %}
+    </div>
+  </div>
+
+  <!-- prettier-ignore-start -->
+    <script>
+        if (!$('#builder_group_0').length) { // Only run once (don't run again for back/forward buttons)
+            $('#builder').queryBuilder({
+                plugins: ['bt-tooltip-errors', 'bt-checkbox', 'not-group'], //, 'filter-description'],
+                filters: hydrateCustomFilters({{ filters | tojson }}),
+                rules: ({{ expression | tojson }}),
+                operators: ({{ operators | tojson }})
+             });
+
+            $('#builder').on('afterUpdateRuleValue.queryBuilder', function (e, rule) {
+                if (rule.filter.plugin === 'datepicker') {
+                    rule.$el.find('.rule-value-container input').datepicker('update');
+                }
+            });
+
+            $('#btn-reset').on('click', function () {
+                if (window.confirm("Clear this ruleset?")) {
+                    $('#builder').queryBuilder('reset');
+                    $("#sqlpreview").html("")
+                    $("#queryresult").html("")
+                }
+            });
+
+            {% if title.startswith("View Topic") %}
+                $('#runInProductionToggle, #btn-reset, #btn-copy').attr('disabled', true);
+                $('#builder *').prop('disabled', true);
+                // https://getbootstrap.com/docs/5.3/components/tooltips/#usage
+                // var works on multiple page loads for this
+                var tooltip = new bootstrap.Tooltip($('#btn-copy-tooltip'), { offset: [-50, 5] })
+                $('#rulesetName').one('input', function () { $('#btn-copy').removeAttr('disabled'); $('#btn-copy-tooltip').tooltip('disable'); });
+            {% endif %}
+        }
+    </script>
+    <!-- prettier-ignore-end -->
+</body>

@@ -1,0 +1,81 @@
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-light mh-100" style="width: 280px;">
+  <a href="/" class="center" style="margin-left: auto; margin-right: auto;"
+    ><img id="wgulogo" src="/static/wgu-logo.png" alt="WGU" class="center" style="width: 200px; height: auto;"
+  /></a>
+  <span class="fs-4" style="text-align: center;">Topic Builder</span>
+  <hr />
+  <ul class="nav nav-pills flex-column mb-auto">
+    <li class="nav-item">
+      <a
+        href="/create"
+        class="nav-link
+            {% if title == 'Create Topic' %}active{% else %}link-dark{% endif %}">
+        <i class="fa-solid fa-plus"></i>
+        &nbsp; Create Topic
+      </a>
+    </li>
+    <li class="nav-item">
+      <button
+        class="nav-link sidebar-dropdown-toggle {% if title.startswith('Edit Topic') %}active{% else %}collapsed link-dark{% endif %}"
+        data-bs-toggle="collapse"
+        data-bs-target="#edit-collapse">
+        <span>Edit Topic</span>
+      </button>
+      <div class="collapse {% if title.startswith('Edit Topic') %}show{% endif %}" id="edit-collapse">
+        <ul>
+          {% for e_ruleset in edit_rulesets %}
+            {% set match_title = 'Edit Topic - ' + e_ruleset.name %}
+            <li class="nav-item">
+              <a
+                href="/edit/{{ e_ruleset.id }}"
+                class="nav-link
+                              {% if title == match_title %}active{% else %}link-dark{% endif %}">
+                {{ e_ruleset.name }}</a
+              >
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </li>
+    <li class="nav-item">
+      <button
+        class="nav-link sidebar-dropdown-toggle {% if title.startswith('View Topic') %}active{% else %}collapsed link-dark{% endif %}"
+        data-bs-toggle="collapse"
+        data-bs-target="#view-collapse">
+        <span>View Topic</span>
+      </button>
+      <div class="collapse {% if title.startswith('View Topic') %}show{% endif %}" id="view-collapse">
+        <ul>
+          {% for v_ruleset in view_rulesets %}
+            {% set match_title = 'View Topic - ' + v_ruleset.name %}
+            <li class="nav-item">
+              <a
+                href="/view/{{ v_ruleset.id }}"
+                class="nav-link
+                              {% if title == match_title %}active{% else %}link-dark{% endif %}">
+                {{ v_ruleset.name }}</a
+              >
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </li>
+  </ul>
+  <hr />
+  <div class="dropdown">
+    <a
+      href="#"
+      class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle"
+      id="dropdownUser"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+      style="justify-content: center;">
+      <i class="fa-solid fa-user"></i> &nbsp; <strong>{{ username }}</strong>
+    </a>
+    <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser">
+      <li><a class="dropdown-item" href="/logout" hx-replace-url="false">Log out</a></li>
+    </ul>
+  </div>
+</div>
+<div
+  style="width: 1.5rem; background-color: rgba(0, 0, 0, 0.1); border: solid rgba(0, 0, 0, 0.15); border-width: 1px 0; box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);"></div>
