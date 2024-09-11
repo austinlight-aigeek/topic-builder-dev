@@ -50,16 +50,26 @@ class TopicBuilderTemplates(Jinja2Templates):
 
     def modal_response(self, request: Request, title: str, content: str):
         context = {"title": title, "content": content}
-        return self.template_response(request, "modal.html", context, headers={"HX-Retarget": "#modal"})
+        return self.template_response(
+            request, "modal.html", context, headers={"HX-Retarget": "#modal"}
+        )
 
     # Landing page is "Create Topic"
     def landingpage_response(
-        self, request: Request, user: User, edit_rulesets: list[Ruleset], view_rulesets: list[Ruleset]
+        self,
+        request: Request,
+        user: User,
+        edit_rulesets: list[Ruleset],
+        view_rulesets: list[Ruleset],
     ):
         return self.createruleset_response(request, user, edit_rulesets, view_rulesets)
 
     def createruleset_response(
-        self, request: Request, user: User, edit_rulesets: list[Ruleset], view_rulesets: list[Ruleset]
+        self,
+        request: Request,
+        user: User,
+        edit_rulesets: list[Ruleset],
+        view_rulesets: list[Ruleset],
     ):
         context = {
             "edit_rulesets": edit_rulesets,
@@ -81,7 +91,9 @@ class TopicBuilderTemplates(Jinja2Templates):
         edit_rulesets: list[Ruleset],
         view_rulesets: list[Ruleset],
     ):
-        expression = Group.model_validate(ruleset.expression).model_dump(mode="json", by_alias=True)
+        expression = Group.model_validate(ruleset.expression).model_dump(
+            mode="json", by_alias=True
+        )
         context = {
             "edit_rulesets": edit_rulesets,
             "view_rulesets": view_rulesets,
@@ -92,7 +104,9 @@ class TopicBuilderTemplates(Jinja2Templates):
             "owner": owner.username,
             "ruleset": ruleset,
         }
-        return self.body_response(request, "querybuilder.html", f"Edit Topic - {ruleset.name}", context)
+        return self.body_response(
+            request, "querybuilder.html", f"Edit Topic - {ruleset.name}", context
+        )
 
     def viewruleset_response(
         self,
@@ -103,7 +117,9 @@ class TopicBuilderTemplates(Jinja2Templates):
         edit_rulesets: list[Ruleset],
         view_rulesets: list[Ruleset],
     ):
-        expression = Group.model_validate(ruleset.expression).model_dump(mode="json", by_alias=True)
+        expression = Group.model_validate(ruleset.expression).model_dump(
+            mode="json", by_alias=True
+        )
         context = {
             "edit_rulesets": edit_rulesets,
             "view_rulesets": view_rulesets,
@@ -114,7 +130,9 @@ class TopicBuilderTemplates(Jinja2Templates):
             "owner": owner.username,
             "ruleset": ruleset,
         }
-        return self.body_response(request, "querybuilder.html", f"View Topic - {ruleset.name}", context)
+        return self.body_response(
+            request, "querybuilder.html", f"View Topic - {ruleset.name}", context
+        )
 
 
 html_templates = TopicBuilderTemplates(directory=["templates/html"])

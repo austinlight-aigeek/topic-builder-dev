@@ -44,7 +44,9 @@ def log_schema(model_class):
                     else str([c.name for c in r.local_columns])
                 )
                 remote_side: str = (
-                    next(iter(r.remote_side)).name if len(r.remote_side) == 1 else str([c.name for c in r.remote_side])
+                    next(iter(r.remote_side)).name
+                    if len(r.remote_side) == 1
+                    else str([c.name for c in r.remote_side])
                 )
                 print(
                     f"{r_name}: {model_class.__name__}.{local_columns} -> {r.target.name}.{remote_side}, {r.direction.name}",

@@ -22,17 +22,23 @@ router = APIRouter()
 @router.get("/", response_class=HTMLResponse)
 async def get_root(request: Request, user: UserDep, db: SessionDep):
     edit_rulesets, view_rulesets = await get_edit_view_rulesets(user, db)
-    return html_templates.landingpage_response(request, user, edit_rulesets, view_rulesets)
+    return html_templates.landingpage_response(
+        request, user, edit_rulesets, view_rulesets
+    )
 
 
 @router.get("/create", response_class=HTMLResponse)
 async def get_create(request: Request, user: UserDep, db: SessionDep):
     edit_rulesets, view_rulesets = await get_edit_view_rulesets(user, db)
-    return html_templates.landingpage_response(request, user, edit_rulesets, view_rulesets)
+    return html_templates.landingpage_response(
+        request, user, edit_rulesets, view_rulesets
+    )
 
 
 @router.post("/create", response_class=HTMLResponse)
-async def post_create(request: Request, user: UserDep, db: SessionDep, ruleset_create: RulesetCreate):
+async def post_create(
+    request: Request, user: UserDep, db: SessionDep, ruleset_create: RulesetCreate
+):
     if len(ruleset_create.name) < MIN_RULESET_NAME_LENGTH or any(
         not (c.isupper() or c == "_") for c in ruleset_create.name
     ):
@@ -56,11 +62,15 @@ async def post_create(request: Request, user: UserDep, db: SessionDep, ruleset_c
         await db.flush()
     except IntegrityError:
         return html_templates.modal_response(
-            request, "Validation Error", f"A topic named '{ruleset_create.name}' already exists!"
+            request,
+            "Validation Error",
+            f"A topic named '{ruleset_create.name}' already exists!",
         )
 
     edit_rulesets, view_rulesets = await get_edit_view_rulesets(user, db)
-    return html_templates.editruleset_response(request, user, ruleset, user, edit_rulesets, view_rulesets)
+    return html_templates.editruleset_response(
+        request, user, ruleset, user, edit_rulesets, view_rulesets
+    )
 
 
 @router.get("/edit/{id_}", response_class=HTMLResponse)
@@ -71,14 +81,26 @@ async def get_edit(request: Request, user: UserDep, db: SessionDep, id_: UUID):
 
     edit_rulesets, view_rulesets = await get_edit_view_rulesets(user, db)
     if ruleset is None:
-        return html_templates.createruleset_response(request, user, edit_rulesets, view_rulesets)
+        return html_templates.createruleset_response(
+            request, user, edit_rulesets, view_rulesets
+        )
     if ruleset.owner_id != user.id:
-        return html_templates.viewruleset_response(request, user, ruleset, owner, edit_rulesets, view_rulesets)
-    return html_templates.editruleset_response(request, user, ruleset, owner, edit_rulesets, view_rulesets)
+        return html_templates.viewruleset_response(
+            request, user, ruleset, owner, edit_rulesets, view_rulesets
+        )
+    return html_templates.editruleset_response(
+        request, user, ruleset, owner, edit_rulesets, view_rulesets
+    )
 
 
 @router.put("/edit/{id_}", response_class=HTMLResponse)
-async def put_edit(request: Request, user: UserDep, db: SessionDep, id_: UUID, ruleset_edit: RulesetEdit):
+async def put_edit(
+    request: Request,
+    user: UserDep,
+    db: SessionDep,
+    id_: UUID,
+    ruleset_edit: RulesetEdit,
+):
     if len(ruleset_edit.name) < MIN_RULESET_NAME_LENGTH or any(
         not (c.isupper() or c == "_") for c in ruleset_edit.name
     ):
@@ -94,9 +116,13 @@ async def put_edit(request: Request, user: UserDep, db: SessionDep, id_: UUID, r
 
     edit_rulesets, view_rulesets = await get_edit_view_rulesets(user, db)
     if ruleset is None:
-        return html_templates.createruleset_response(request, user, edit_rulesets, view_rulesets)
+        return html_templates.createruleset_response(
+            request, user, edit_rulesets, view_rulesets
+        )
     if ruleset.owner_id != user.id:
-        return html_templates.viewruleset_response(request, user, ruleset, owner, edit_rulesets, view_rulesets)
+        return html_templates.viewruleset_response(
+            request, user, ruleset, owner, edit_rulesets, view_rulesets
+        )
 
     try:
         ruleset.name = ruleset_edit.name
@@ -105,10 +131,14 @@ async def put_edit(request: Request, user: UserDep, db: SessionDep, id_: UUID, r
         await db.flush()
     except IntegrityError:
         return html_templates.modal_response(
-            request, "Validation Error", f"A topic named '{ruleset_edit.name}' already exists!"
+            request,
+            "Validation Error",
+            f"A topic named '{ruleset_edit.name}' already exists!",
         )
 
-    return html_templates.editruleset_response(request, user, ruleset, owner, edit_rulesets, view_rulesets)
+    return html_templates.editruleset_response(
+        request, user, ruleset, owner, edit_rulesets, view_rulesets
+    )
 
 
 @router.get("/view/{id_}", response_class=HTMLResponse)
@@ -119,12 +149,18 @@ async def get_view(request: Request, user: UserDep, db: SessionDep, id_: UUID):
 
     edit_rulesets, view_rulesets = await get_edit_view_rulesets(user, db)
     if ruleset is None:
-        return html_templates.createruleset_response(request, user, edit_rulesets, view_rulesets)
-    return html_templates.viewruleset_response(request, user, ruleset, owner, edit_rulesets, view_rulesets)
+        return html_templates.createruleset_response(
+            request, user, edit_rulesets, view_rulesets
+        )
+    return html_templates.viewruleset_response(
+        request, user, ruleset, owner, edit_rulesets, view_rulesets
+    )
 
 
 @router.post("/query", response_class=HTMLResponse)
-async def post_query(request: Request, root: Group, db: SessionDep, user: UserDep):  # noqa: ARG001. Depends arg used for auth
+async def post_query(
+    request: Request, root: Group, db: SessionDep, user: UserDep
+):  # noqa: ARG001. Depends arg used for auth
     sql, params = await generate_postgresql_query(root)
     connection = await db.connection()
     result = await connection.exec_driver_sql(sql, params)
@@ -138,5 +174,7 @@ async def post_query(request: Request, root: Group, db: SessionDep, user: UserDe
             param_strs.append(str(param))
 
     return html_templates.template_response(
-        request, "_queryresult.html", {"sql": sql, "params": param_strs, "records": records}
+        request,
+        "_queryresult.html",
+        {"sql": sql, "params": param_strs, "records": records},
     )
