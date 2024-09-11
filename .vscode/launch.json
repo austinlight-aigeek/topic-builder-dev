@@ -2,8 +2,13 @@
   "version": "0.2.0",
   "configurations": [
     {
+<<<<<<< HEAD
       "name": "Python: Remote Attach",
       "type": "python",
+=======
+      "name": "Python Debugger: Attach to Docker Compose",
+      "type": "debugpy",
+>>>>>>> 3d3b5e848e3f33e46ab0a21b966c97cdf1917352
       "request": "attach",
       "connect": {
         "host": "localhost",
@@ -12,10 +17,25 @@
       "pathMappings": [
         {
           "localRoot": "${workspaceFolder}/src/app",
+<<<<<<< HEAD
           "remoteRoot": "/code/app"
         }
       ],
       "justMyCode": true
+=======
+          "remoteRoot": "."
+        }
+      ],
+      "justMyCode": false
+    },
+    {
+      "name": "Python Debugger: Script",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "justMyCode": false
+>>>>>>> 3d3b5e848e3f33e46ab0a21b966c97cdf1917352
     }
   ]
 }

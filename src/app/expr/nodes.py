@@ -13,7 +13,14 @@ from expr.ops import (
     SimilarityOperator,
     SourceOperator,
 )
-from pydantic import BaseModel, Field, SerializeAsAny, field_serializer, model_serializer, model_validator
+from pydantic import (
+    BaseModel,
+    Field,
+    SerializeAsAny,
+    field_serializer,
+    model_serializer,
+    model_validator,
+)
 from util import enum_to_list
 
 
@@ -206,12 +213,20 @@ class Date(Rule):
             "description": "Date-based filtering.",
             "type": "datetime",
             "plugin": "datepicker",
-            "plugin_config": {"format": "yyyy-mm-dd", "todayBtn": "linked", "autoclose": True},
+            "plugin_config": {
+                "format": "yyyy-mm-dd",
+                "todayBtn": "linked",
+                "autoclose": True,
+            },
         }
 
 
 # Discriminated union to determine model
 # Need to treat Groups differently as query builder does not provide an id for that one
 AnyExprNode = (
-    Group | Annotated[Source | Sentiment | Intent | Lemma | Similarity | Regex | Date, Field(discriminator="id")]
+    Group
+    | Annotated[
+        Source | Sentiment | Intent | Lemma | Similarity | Regex | Date,
+        Field(discriminator="id"),
+    ]
 )

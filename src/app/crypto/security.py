@@ -32,10 +32,15 @@ class ForbiddenError(Exception):
 
 
 # Access token, submitted as cookie for UI, header for API
-def create_access_token(data: dict, expires_delta: timedelta = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)):
+def create_access_token(
+    data: dict,
+    expires_delta: timedelta = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES),
+):
     expires = datetime.now(UTC) + expires_delta
     access_token_id = str(uuid4())
-    return jwt.encode(data | {"exp": expires, "jti": access_token_id}, SECRET_KEY, ALGORITHM)
+    return jwt.encode(
+        data | {"exp": expires, "jti": access_token_id}, SECRET_KEY, ALGORITHM
+    )
 
 
 def validate_access_token(token: str) -> dict:
@@ -59,7 +64,9 @@ async def get_user(request: Request, db: SessionDep):
     token = validate_access_token(token_str)
 
     username = token.get("sub", "")
-    result_set = await db.execute(select(User).where((User.username == username) & (User.is_enabled.is_(True))))
+    result_set = await db.execute(
+        select(User).where((User.username == username) & (User.is_enabled.is_(True)))
+    )
     user = result_set.scalars().first()  # Will be None if no user is found
 
     if user is None:
